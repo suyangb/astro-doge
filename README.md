@@ -322,7 +322,7 @@ bun run build
 
 ## 致谢
 
-主题设计受 [astro-nano](https://github.com/markhorn-dev/astro-nano) 启发。
+主题基于 [astro-nano](https://github.com/markhorn-dev/astro-nano) 进行修改，碎碎念留言板等参照 [Viki](https://github.com/vikiboss/blog) 样式进行开发。
 
 ## License
 
