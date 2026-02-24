@@ -1,0 +1,328 @@
+---
+import { type CollectionEntry, getCollection } from "astro:content";
+import Comments from "@components/Comments.astro";
+import Container from "@components/Container.astro";
+import FormattedDate from "@components/FormattedDate.astro";
+import TableOfContents from "@components/TableOfContents.astro";
+import { SITE } from "@consts";
+import PageLayout from "@layouts/PageLayout.astro";
+import { formatYMD, readingTime } from "@lib/utils";
+
+export async function getStaticPaths() {
+	const allPosts = (await getCollection("posts"))
+		.filter((post: CollectionEntry<"posts">) => !post.data.draft)
+		.sort(
+			(a: CollectionEntry<"posts">, b: CollectionEntry<"posts">) =>
+				b.data.date.valueOf() - a.data.date.valueOf(),
+		);
+	return allPosts.map((post: CollectionEntry<"posts">) => ({
+		params: { slug: post.data.slug || post.slug },
+		props: post,
+	}));
+}
+type Props = CollectionEntry<"posts">;
+
+const post = Astro.props;
+const { Content } = await post.render();
+
+// 计算字数
+function countWords(text: string): number {
+	// 移除 HTML 标签
+	const plainText = text.replace(/<[^>]+>/g, "");
+	// 计算中文字符
+	const chineseChars = (plainText.match(/[\u4e00-\u9fa5]/g) || []).length;
+	// 计算英文单词
+	const englishWords = (
+		plainText.replace(/[\u4e00-\u9fa5]/g, " ").match(/[a-zA-Z]+/g) || []
+	).length;
+	return chineseChars + englishWords;
+}
+
+const wordCount = countWords(post.body);
+
+// 获取所有文章并排除当前文章
+const allPosts = (await getCollection("posts")).filter(
+	(p: CollectionEntry<"posts">) => !p.data.draft && p.slug !== post.slug,
+);
+
+// 随机打乱并取 n 篇
+function shuffleArray<T>(array: T[]): T[] {
+	const shuffled = [...array];
+	for (let i = shuffled.length - 1; i > 0; i--) {
+		const j = Math.floor(Math.random() * (i + 1));
+		[shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+	}
+	return shuffled;
+}
+
+const relatedPosts = shuffleArray(allPosts).slice(
+	0,
+	SITE.NUM_RELATED_POSTS_ON_POST,
+);
+
+// 获取当前文章的 URL
+const articleUrl = Astro.url.href;
+---
+
+<PageLayout
+  title={post.data.title}
+  description={post.data.description || post.data.title}
+>
+  <TableOfContents />
+  <Container>
+    <div class="mb-8 space-y-3">
+      <h1
+        class="animate text-2xl leading-tight font-bold text-stone-900 sm:text-3xl lg:text-4xl dark:text-stone-100"
+      >
+        {post.data.title}
+      </h1>
+      <div
+        class="animate flex flex-wrap items-center gap-2 text-sm text-stone-500 dark:text-stone-400"
+      >
+        <span class="font-mono">
+          <FormattedDate date={post.data.date} />
+        </span>
+        <span class="text-stone-300 dark:text-stone-600">·</span>
+        <span>
+          {readingTime(post.body)}
+        </span>
+        <div class="hidden sm:inline">
+          <span class="text-stone-300 dark:text-stone-600">·</span>
+          <span>
+            {wordCount.toLocaleString()} 字
+          </span>
+        </div>
+      </div>
+    </div>
+
+    <article class="animate post-content">
+      <Content />
+    </article>
+
+    <!-- End 分隔线 -->
+    <div class="relative my-10 flex items-center justify-center">
+      <div
+        class="absolute h-px w-full bg-gradient-to-r from-transparent via-stone-200 to-transparent dark:via-stone-700"
+      >
+      </div>
+      <span
+        class="relative flex items-center gap-2 bg-stone-50 px-4 text-sm text-stone-400 dark:bg-stone-950 dark:text-stone-500"
+      >
+        <span>End</span>
+      </span>
+    </div>
+
+    <!-- 分享按钮 -->
+    <div class="animate mb-8 flex flex-wrap items-center gap-3">
+      <span class="text-sm text-stone-500 dark:text-stone-400">分享：</span>
+      <button
+        id="copy-link-btn"
+        class="inline-flex items-center gap-1.5 rounded-full bg-stone-100 px-3 py-1.5 text-xs font-medium text-stone-600 transition-colors hover:bg-stone-200 dark:bg-stone-800 dark:text-stone-400 dark:hover:bg-stone-700"
+        data-url={articleUrl}
+        title="复制链接"
+      >
+        <svg
+          class="h-3.5 w-3.5"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        >
+          <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"
+          ></path>
+          <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"
+          ></path>
+        </svg>
+        <span id="copy-link-text">复制链接</span>
+      </button>
+      <a
+        href={`https://twitter.com/intent/tweet?text=${encodeURIComponent(post.data.title)}&url=${encodeURIComponent(articleUrl)}`}
+        target="_blank"
+        rel="noopener noreferrer"
+        class="inline-flex items-center gap-1.5 rounded-full bg-stone-100 px-3 py-1.5 text-xs font-medium text-stone-600 transition-colors hover:bg-stone-200 dark:bg-stone-800 dark:text-stone-400 dark:hover:bg-stone-700"
+        title="分享到 X"
+      >
+        <svg class="h-3.5 w-3.5" viewBox="0 0 24 24" fill="currentColor">
+          <path
+            d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"
+          ></path>
+        </svg>
+        X
+      </a>
+    </div>
+
+    {
+      relatedPosts.length > 0 && (
+        <div class="animate mb-10">
+          <h3 class="mb-4 text-sm font-semibold text-stone-700 dark:text-stone-300">
+            也可以看看
+          </h3>
+
+          <ul class="space-y-1">
+            {relatedPosts.map((relatedPost) => (
+              <li>
+                <a
+                  href={`/${relatedPost.data.slug || relatedPost.slug}`}
+                  class="group flex items-center justify-between gap-4 py-2 transition-colors duration-200"
+                >
+                  <span class="text-sm text-stone-500 transition-colors duration-200 group-hover:text-stone-800 dark:text-stone-400 dark:group-hover:text-stone-200">
+                    {relatedPost.data.title}
+                  </span>
+                  <span class="shrink-0 font-mono text-xs text-stone-400 dark:text-stone-500">
+                    {formatYMD(relatedPost.data.date)}
+                  </span>
+                </a>
+              </li>
+            ))}
+          </ul>
+        </div>
+      )
+    }
+
+    <!-- 评论区 -->
+    <div class="animate mt-10 mb-8 border-t border-stone-200 pt-8 dark:border-stone-800">
+      <h3 class="mb-6 text-base font-semibold text-stone-900 dark:text-stone-100">评论</h3>
+      <Comments slug={post.data.slug || post.slug} title={post.data.title} />
+    </div>
+  </Container>
+
+  <script>
+    import { timeAgo } from '@lib/utils'
+
+    function updateTimeAgo() {
+      document.querySelectorAll('.time-ago').forEach((el) => {
+        const timestamp = el.getAttribute('data-timestamp')
+        if (timestamp) {
+          const date = new Date(parseInt(timestamp))
+          el.textContent = timeAgo(date)
+        }
+      })
+    }
+
+    // 为标题锚点添加点击复制链接功能
+    function setupHeadingAnchors() {
+      const article = document.querySelector('article.post-content')
+      if (!article) return
+
+      const anchors = article.querySelectorAll('.heading-anchor')
+      anchors.forEach((anchor) => {
+        anchor.addEventListener('click', async (e) => {
+          e.preventDefault()
+          const href = anchor.getAttribute('href')
+          if (!href) return
+
+          const url = `${window.location.origin}${window.location.pathname}${href}`
+
+          // 更新 URL hash
+          history.pushState(null, '', href)
+
+          // 滚动到对应标题
+          const targetId = href.slice(1)
+          const targetEl = document.getElementById(targetId)
+          if (targetEl) {
+            targetEl.scrollIntoView({ behavior: 'smooth', block: 'start' })
+          }
+
+          try {
+            await navigator.clipboard.writeText(url)
+            // 显示复制成功提示
+            showCopyToast('链接已复制')
+          } catch (err) {
+            // 静默失败，滚动行为已完成
+          }
+        })
+      })
+
+      // 页面加载时如果 URL 带 hash，滚动到对应标题
+      const hash = window.location.hash
+      if (hash) {
+        const targetEl = document.getElementById(hash.slice(1))
+        if (targetEl) {
+          requestAnimationFrame(() => {
+            targetEl.scrollIntoView({ behavior: 'smooth', block: 'start' })
+          })
+        }
+      }
+    }
+
+    // 显示复制成功 Toast
+    function showCopyToast(message: string) {
+      // 检查是否已有 toast
+      let toast = document.getElementById('copy-toast')
+      if (!toast) {
+        toast = document.createElement('div')
+        toast.id = 'copy-toast'
+        toast.className =
+          'fixed bottom-8 left-1/2 -translate-x-1/2 z-50 px-4 py-2 rounded-lg bg-stone-800/90 text-white text-sm shadow-lg dark:bg-stone-200 dark:text-stone-800 transition-all duration-300 opacity-0 pointer-events-none'
+        document.body.appendChild(toast)
+      }
+
+      toast.textContent = `✓ ${message}`
+      toast.classList.remove('opacity-0')
+      toast.classList.add('opacity-100')
+
+      setTimeout(() => {
+        toast.classList.remove('opacity-100')
+        toast.classList.add('opacity-0')
+      }, 2000)
+    }
+
+    function setupCopyLink() {
+      const copyBtn = document.getElementById('copy-link-btn')
+      const copyText = document.getElementById('copy-link-text')
+
+      if (copyBtn && copyText) {
+        copyBtn.addEventListener('click', async () => {
+          const url = copyBtn.getAttribute('data-url') || window.location.href
+          try {
+            await navigator.clipboard.writeText(url)
+            copyText.textContent = '已复制!'
+            setTimeout(() => {
+              copyText.textContent = '复制链接'
+            }, 2000)
+          } catch (err) {
+            console.error('复制失败:', err)
+          }
+        })
+      }
+    }
+
+    function init() {
+      updateTimeAgo()
+      setupCopyLink()
+      setupHeadingAnchors()
+      // 每分钟更新一次时间
+      setInterval(updateTimeAgo, 60000)
+    }
+
+    document.addEventListener('DOMContentLoaded', init)
+    document.addEventListener('astro:after-swap', init)
+
+    if (document.readyState === 'complete') {
+      init()
+    }
+  </script>
+
+  <style is:global>
+    /* 文章页面样式 */
+    .post-content {
+      font-size: 0.9375rem;
+      line-height: 1.8;
+    }
+
+    @media (min-width: 640px) {
+      .post-content {
+        font-size: 1rem;
+        line-height: 1.85;
+      }
+    }
+
+    @media (min-width: 768px) {
+      .post-content {
+        font-size: 1.0625rem;
+      }
+    }
+  </style>
+</PageLayout>

@@ -1,0 +1,170 @@
+---
+import Container from "@components/Container.astro";
+import Link from "@components/Link.astro";
+import { ABOUT, PROJECTS, SITE, SOCIALS, TECH_STACK } from "@consts";
+import PageLayout from "@layouts/PageLayout.astro";
+---
+
+<PageLayout title={ABOUT.TITLE} description={ABOUT.DESCRIPTION}>
+  <Container>
+    <div class="space-y-4">
+      <h1
+        class="animate text-3xl font-semibold text-stone-900 dark:text-stone-100"
+      >
+        Your Name
+      </h1>
+      <p class="animate mb-8 text-stone-600 dark:text-stone-400">
+        一句话介绍自己
+      </p>
+    </div>
+
+    <div class="space-y-8 sm:space-y-10">
+      <!-- 个人介绍 -->
+      <section class="animate">
+        <h2
+          class="mb-3 flex items-center gap-2 text-base font-semibold text-stone-900 sm:mb-4 sm:text-lg dark:text-stone-100"
+        >
+          Profile
+        </h2>
+        <div
+          class="space-y-4 text-sm text-stone-700 sm:text-base dark:text-stone-300"
+        >
+          <p>
+            这里是你的个人介绍。可以写写你是谁、在做什么、对什么感兴趣。
+          </p>
+          <p>
+            Astro Doge 是一个简洁轻量的博客主题，支持文章、碎碎念、友链、留言板等功能。你可以在 <code>src/pages/about/index.astro</code> 中修改这段内容。
+          </p>
+        </div>
+      </section>
+
+      <!-- 联系方式 -->
+      <section class="animate">
+        <h2
+          class="mb-3 flex items-center gap-2 text-base font-semibold text-stone-900 sm:mb-4 sm:text-lg dark:text-stone-100"
+        >
+          Contact
+        </h2>
+        <div class="flex flex-wrap gap-x-4 gap-y-2 text-sm">
+          {
+            SOCIALS.map((social) => (
+              <Link
+                href={social.HREF}
+                external
+                class="text-stone-600 transition-colors hover:text-stone-900 dark:text-stone-400 dark:hover:text-stone-100"
+              >
+                {social.NAME}
+              </Link>
+            ))
+          }
+          <Link
+            href={`mailto:${SITE.EMAIL}`}
+            class="text-stone-600 transition-colors hover:text-stone-900 dark:text-stone-400 dark:hover:text-stone-100"
+          >
+            {SITE.EMAIL}
+          </Link>
+        </div>
+      </section>
+
+      <!-- 项目 -->
+      <section class="animate">
+        <h2
+          class="mb-3 flex items-center gap-2 text-base font-semibold text-stone-900 sm:mb-4 sm:text-lg dark:text-stone-100"
+        >
+          Projects
+        </h2>
+        <div class="space-y-6">
+          {
+            PROJECTS.map((group) => (
+              <div class="space-y-2">
+                <h3 class="text-xs font-medium uppercase tracking-wider text-stone-500 dark:text-stone-400">
+                  {group.category}
+                </h3>
+                <ul class="space-y-2">
+                  {group.items.map((project) => (
+                    <li class="text-sm text-stone-700 dark:text-stone-300">
+                      <div class="inline-flex flex-wrap items-baseline gap-2">
+                        <Link
+                          href={project.href}
+                          external
+                          class="font-medium text-stone-900 hover:text-stone-600 dark:text-stone-100 dark:hover:text-stone-400"
+                        >
+                          {project.name}
+                        </Link>
+                        {project.stars && (
+                          <span class="text-xs text-stone-400 dark:text-stone-500">
+                            {project.stars}
+                          </span>
+                        )}
+                        {project.homepage && (
+                          <Link
+                            href={project.homepage}
+                            external
+                            class="text-xs text-stone-400 hover:text-stone-600 dark:text-stone-500 dark:hover:text-stone-400"
+                          >
+                            主页
+                          </Link>
+                        )}
+                        {project.badge && (
+                          <span class="rounded bg-stone-100 px-1.5 py-0.5 text-xs leading-none text-stone-400 dark:bg-stone-800 dark:text-stone-500">
+                            {project.badge}
+                          </span>
+                        )}
+                        <span class="text-stone-400 dark:text-stone-500">
+                          — {project.description}
+                        </span>
+                      </div>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            ))
+          }
+          <Link
+            href="https://github.com/username?tab=repositories"
+            external
+            class="inline-block text-sm text-stone-500 transition-colors hover:text-stone-900 dark:text-stone-400 dark:hover:text-stone-100"
+          >
+            探索更多
+          </Link>
+        </div>
+      </section>
+
+      <!-- 技术栈 -->
+      <section class="animate">
+        <h2
+          class="mb-3 flex items-center gap-2 text-base font-semibold text-stone-900 sm:mb-4 sm:text-lg dark:text-stone-100"
+        >
+          Tech
+        </h2>
+        <div class="space-y-6">
+          {
+            TECH_STACK.map((group) => (
+              <div class="space-y-2">
+                <h3 class="text-xs font-medium uppercase tracking-wider text-stone-500 dark:text-stone-400">
+                  {group.category}
+                </h3>
+                <ul class="space-y-2">
+                  {group.items.map((tech) => (
+                    <li class="text-sm text-stone-700 dark:text-stone-300">
+                      <Link
+                        href={tech.href}
+                        external
+                        class="font-medium text-stone-900 dark:text-stone-100"
+                      >
+                        {tech.name}
+                      </Link>
+                      <span class="text-stone-400 dark:text-stone-500">
+                        {" "}— {tech.description}
+                      </span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            ))
+          }
+        </div>
+      </section>
+    </div>
+  </Container>
+</PageLayout>

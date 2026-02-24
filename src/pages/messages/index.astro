@@ -1,0 +1,26 @@
+---
+import Comments from "@components/Comments.astro";
+import Container from "@components/Container.astro";
+import { MESSAGES } from "@consts";
+import PageLayout from "@layouts/PageLayout.astro";
+---
+
+<PageLayout title={MESSAGES.TITLE} description={MESSAGES.DESCRIPTION}>
+  <Container>
+    <div class="space-y-4">
+      <h1
+        class="animate text-3xl font-semibold text-stone-900 dark:text-stone-100"
+      >
+        留言板
+      </h1>
+      <p class="animate text-stone-600 dark:text-stone-400">
+        在这里留下你的足迹和想说的话
+      </p>
+    </div>
+
+    <div class="animate mt-8">
+      <h2 class="mb-6 font-medium sm:text-lg">说点什么</h2>
+      <Comments slug="messages" title="留言板" />
+    </div>
+  </Container>
+</PageLayout>
