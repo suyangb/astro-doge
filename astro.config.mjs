@@ -10,7 +10,7 @@ import remarkDemoteH1ToH2 from "./src/lib/remark/remark-demote-h1.mjs";
 import remarkExternalLinks from "./src/lib/remark/remark-external-links.mjs";
 
 export default defineConfig({
-	site: "https://example.com/",
+	site: "https://wsyblog.cn/",
 	compressHTML: true,
 
 	output: "static",
