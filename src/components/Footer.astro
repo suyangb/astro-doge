@@ -1,85 +1,56 @@
 ---
 import Container from "@components/Container.astro";
-import { SITE } from "@consts";
----
+import { SITE } from "@consts";<footer class="animate border-stone-200 dark:border-stone-800<Container><div class="py-8">
+     <!-- 主要内容 -->
+<hr class="my-6 border-stone-200 sm:hidden dark:border-stone-800" />
+     <div class="flex flex-col gap-8 sm:hidden sm:flex-row sm:justify<!-- 左侧：网站信息 -->
+<div class="space-y-3">
+         <div class="font-semibold text-stone-900 dark:text-stone-100">
+            {SITE.N</div<p class="max-w-xs text-sm text-stone-600 dark:text-stone-400">
+            {SITE.DESCRIPTION</p></div>
 
-<footer class="animate border-stone-200 dark:border-stone-800">
-  <Container>
-    <div class="py-8">
-      <!-- 主要内容 -->
-      <hr class="my-6 border-stone-200 sm:hidden dark:border-stone-800" />
-      <div class="flex flex-col gap-8 sm:hidden sm:flex-row sm:justify-between">
-        <!-- 左侧：网站信息 -->
-        <div class="space-y-3">
-          <div class="font-semibold text-stone-900 dark:text-stone-100">
-            {SITE.NAME}
-          </div>
-          <p class="max-w-xs text-sm text-stone-600 dark:text-stone-400">
-            {SITE.DESCRIPTION}
-          </p>
-        </div>
-
-        <!-- 右侧：链接 -->
-        <div class="flex gap-12">
-          <!-- 导航链接 -->
-          <div class="space-y-3">
-            <div
+<!-- 右侧：链接<div class="flex gap-12<!-- 导航<div class="space-y-3<div
               class="text-xs font-semibold tracking-wider text-stone-500 uppercase dark:text-stone-400"
             >
-              导航
-            </div>
-            <ul class="space-y-2 text-sm">
-              <li>
-                <a
+              导航</div>
+<ul class="space-y-2 text-sm"><li>
+<a
                   href="/posts"
                   class="text-stone-600 transition-colors hover:text-stone-900 dark:text-stone-400 dark:hover:text-stone-100"
                 >
                   文章
-                </a>
-              </li>
-              <li>
-                <a
+                </li><li>
+<a
                   href="/thoughts"
                   class="text-stone-600 transition-colors hover:text-stone-900 dark:text-stone-400 dark:hover:text-stone-100"
                 >
                   碎碎念
-                </a>
+</a>
               </li>
               <li>
                 <a
                   href="/friends"
                   class="text-stone-600 transition-colors hover:text-stone-900 dark:text-stone-400 dark:hover:text-stone-100"
                 >
-                  友链
-                </a>
-              </li>
+                  友链</a>
+</li>
             </ul>
-          </div>
-
           <!-- 更多链接 -->
-          <div class="space-y-3">
-            <div
+          <div class="space-y-<div
               class="text-xs font-semibold tracking-wider text-stone-500 uppercase dark:text-stone-400"
             >
-              更多
-            </div>
-            <ul class="space-y-2 text-sm">
-              <li>
-                <a
+              </div><ul class="space-y-2 text-sm<li><a
                   href="/about"
                   class="text-stone-600 transition-colors hover:text-stone-900 dark:text-stone-400 dark:hover:text-stone-100"
                 >
                   关于
-                </a>
-              </li>
-              <li>
-                <a
+                </li<li><a
                   href="/rss.xml"
                   target="_blank"
                   class="inline-flex items-center gap-1 text-stone-600 transition-colors hover:text-stone-900 dark:text-stone-400 dark:hover:text-stone-100"
                 >
                   RSS
-                  <svg
+                 <svg
                     class="h-3 w-3 opacity-60"
                     viewBox="0 0 24 24"
                     fill="none"
@@ -88,18 +59,15 @@ import { SITE } from "@consts";
                     stroke-linecap="round"
                     stroke-linejoin="round"
                   >
-                    <path d="M7 17L17 7M17 7H7M17 7V17"></path>
-                  </svg>
-                </a>
-              </li>
-              <li>
-                <a
+                   <path d="M7 17L17 7M17 7H7M17 7V17"></svg</a></li>
+<li>
+               <a
                   href="https://github.com/username"
                   target="_blank"
                   class="inline-flex items-center gap-1 text-stone-600 transition-colors hover:text-stone-900 dark:text-stone-400 dark:hover:text-stone-100"
                 >
                   GitHub
-                  <svg
+<svg
                     class="h-3 w-3 opacity-60"
                     viewBox="0 0 24 24"
                     fill="none"
@@ -108,52 +76,41 @@ import { SITE } from "@consts";
                     stroke-linecap="round"
                     stroke-linejoin="round"
                   >
-                    <path d="M7 17L17 7M17 7H7M17 7V17"></path>
+<path d="M7 17L17 7M17 7H7M17 7V17"></path>
                   </svg>
-                </a>
-              </li>
-            </ul>
-          </div>
+                </li></ul>
+</div>
         </div>
-      </div>
-
       <!-- 分割线 -->
-      <hr class="my-6 border-stone-200 dark:border-stone-800" />
-
-      <!-- 底部版权信息 -->
-      <div
+      <hr class="my-6 border-stone-200 dark:border-stone-800" /><!-- 底部版权信息 + 备案号 --><div
         class="flex flex-col items-center justify-between gap-4 text-sm text-stone-500 sm:flex-row dark:text-stone-400"
-      >
-        <div class="flex items-center gap-1">
+      ><div class="flex flex-wrap items-center gap-1">
           <span>&copy; 2006-{new Date().getFullYear()}</span>
           <a
             href="/"
             class="font-medium text-stone-700 transition-colors hover:text-stone-900 dark:text-stone-300 dark:hover:text-stone-100"
           >
-            Your Name
-          </a>
-          <span>·</span>
-          <a href="https://beian.miit.gov.cn/" target="_blank" class="hover:text-stone-800 dark:hover:text-stone-300">
-            粤ICP备xxxxxxxx号
-          </a>
-          <span>·</span>
-          <span>All rights reserved.</span>
+            Your Name</a>
+          <span>·<!-- ICP备案 - 官方链接<a href="https://beian.miit.gov.cn/" target="_blank" class="transition-colors hover:text-stone-800 dark:hover:text-stone-300">
+            皖ICP备2024049551号-2
+          <span</span>
+<!-- 网安备案 - 官方链接 -->
+<a href="https://www.beian.gov.cn/" target="_blank" class="transition-colors hover:text-stone-800 dark:hover:text-stone-300">
+            皖公网安备34162202003345号
+          <span</span>
+<span>All rights</span>
         </div>
 
         <div class="flex items-center gap-4">
-          <!-- 构建信息 -->
-          <span class="text-xs text-stone-400 dark:text-stone-500">
+         <!-- 构建信息 -->
+<span class="text-xs text-stone-400 dark:text-stone-500">
             Built with
             <a
               href="https://github.com/dogxii/astro-doge"
               target="_blank"
               class="underline decoration-stone-300 underline-offset-2 transition-colors hover:text-stone-600 dark:decoration-stone-600 dark:hover:text-stone-300"
             >
-              Astro Doge
-            </a>
-          </span>
-        </div>
+              Astro Dog</a></span>
+</div>
       </div>
-    </div>
-  </Container>
-</footer>
+    </Container</footer>
