@@ -4,9 +4,9 @@ export const SITE: Site = {
 	NAME: "王苏洋Blog",
 	EMAIL: "1493367306@qq.com",
 	DESCRIPTION: "记录折腾博客、技术探索与生活思考的个人小站。",
-	NUM_POSTS_ON_HOMEPAGE: 4,
+	NUM_POSTS_ON_HOMEPAGE: 10,
 	NUM_THOUGHTS_ON_HOMEPAGE: 3,
-	NUM_RELATED_POSTS_ON_POST: 5,
+	NUM_RELATED_POSTS_ON_POST: 3,
 };
 
 export const HOME: Metadata = {
