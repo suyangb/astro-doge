@@ -1,8 +1,8 @@
 import type { Metadata, Projects, Site, Socials, TechStack } from "@types";
 
 export const SITE: Site = {
-	NAME: "王苏洋Blog",
-	EMAIL: "hi@wangsuoyang.com",
+	NAME: "Hi, I'm 王苏洋 👋",
+	EMAIL: "1493367306@qq.com",
 	DESCRIPTION: "记录折腾博客、技术探索与生活思考的个人小站。",
 	NUM_POSTS_ON_HOMEPAGE: 4,
 	NUM_THOUGHTS_ON_HOMEPAGE: 3,
@@ -45,13 +45,13 @@ export const PROJECTS: Projects = [
 		items: [
 			{
 				name: "王苏洋Blog",
-				href: "https://github.com/wangsuoyang/blog",
-				homepage: "https://wangsuoyang.com",
+				href: "https://github.com/suyangb",
+				homepage: "https://wsyblog.cn",
 				description: "我的个人博客，基于 Astro 构建，持续折腾中。",
 			},
 			{
 				name: "Astro 主题定制",
-				href: "https://github.com/wangsuoyang/astro-theme",
+				href: "https://github.com/suyangb",
 				badge: "WIP",
 				description: "自用简约二次元风格 Astro 博客主题开发。",
 			},
@@ -105,6 +105,6 @@ export const TECH_STACK: TechStack = [
 export const SOCIALS: Socials = [
 	{
 		NAME: "GitHub",
-		HREF: "https://github.com/wangsuoyang",
+		HREF: "https://github.com/suyangb",
 	},
 ];
