@@ -6,7 +6,7 @@ import { SITE } from "@consts";
 <footer class="animate border-stone-200 dark:border-stone-800">
   <Container>
     <div class="py-8">
-      <hr class="my-6 border-stone-200 sm:hidden dark:border-stone-800" />
+      <hr class="my-6 border-stone-200 dark:border-stone-800" />
       <div class="flex flex-col gap-8 sm:flex-row sm:justify-between">
         <div class="space-y-3">
           <div class="font-semibold text-stone-900 dark:text-stone-100">
@@ -74,31 +74,34 @@ import { SITE } from "@consts";
 
       <hr class="my-6 border-stone-200 dark:border-stone-800" />
 
-      <div class="flex flex-col items-center justify-between gap-4 text-sm text-stone-500 sm:flex-row dark:text-stone-400">
-        <div class="flex flex-wrap items-center gap-1">
-          <span>&copy; 2006-{new Date().getFullYear()}</span>
-          <a href="/" class="font-medium text-stone-700 transition-colors hover:text-stone-900 dark:text-stone-300 dark:hover:text-stone-100">
-            Your Name
-          </a>
-          <span>·</span>
-          <a href="https://beian.miit.gov.cn/" target="_blank" class="transition-colors hover:text-stone-800 dark:hover:text-stone-300">
+      <!-- 官方标准备案排版 -->
+      <div class="flex flex-col items-center justify-center gap-2 text-sm text-stone-500 sm:flex-row sm:justify-between dark:text-stone-400">
+        <div class="flex flex-wrap items-center justify-center gap-x-3 gap-y-1">
+          <span>&copy; 2024-{new Date().getFullYear()} {SITE.NAME}</span>
+          
+          <!-- ICP 备案 -->
+          <a href="https://beian.miit.gov.cn/" target="_blank" rel="noopener noreferrer" class="hover:text-stone-800 dark:hover:text-stone-300">
             皖ICP备2024049551号-2
           </a>
-          <span>·</span>
-          <a href="https://beian.gov.cn" target="_blank" class="transition-colors hover:text-stone-800 dark:hover:text-stone-300">
+          
+          <!-- 公安备案 官方图标 + 标准格式 -->
+          <a 
+            href="https://beian.gov.cn/?id=34162202003345" 
+            target="_blank" 
+            rel="noopener noreferrer"
+            class="inline-flex items-center gap-1 hover:text-stone-800 dark:hover:text-stone-300"
+          >
+            <img 
+              src="https://www.beian.gov.cn/img/ga.png" 
+              alt="网安备案" 
+              class="h-4 w-auto"
+            />
             皖公网安备34162202003345号
           </a>
-          <span>·</span>
-          <span>All rights reserved.</span>
         </div>
 
-        <div class="flex items-center gap-4">
-          <span class="text-xs text-stone-400 dark:text-stone-500">
-            Built with
-            <a href="https://github.com/dogxii/astro-doge" target="_blank" class="underline decoration-stone-300 underline-offset-2 transition-colors hover:text-stone-600 dark:decoration-stone-600 dark:hover:text-stone-300">
-              Astro Doge
-            </a>
-          </span>
+        <div class="text-xs text-stone-400 dark:text-stone-500">
+          Built with Astro Doge
         </div>
       </div>
     </div>
