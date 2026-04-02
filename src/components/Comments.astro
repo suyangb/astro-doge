@@ -1,137 +1,51 @@
 ---
-// 自定义 Twikoo 评论组件
-// 现代化卡片式设计
-
 interface Props {
 	slug: string;
 	title: string;
 }
-
 const { slug, title } = Astro.props;
 ---
 
-<section class="comments-section" data-slug={slug} data-title={title}>
-
-  <!-- Twikoo 挂载容器 -->
+<section class="comments-section">
   <div id="twikoo"></div>
-
 </section>
 
-<script>
-// ==============================================
-// Twikoo 配置（请把 envId 改成你自己的）
-// ==============================================
-const TIKOO_ENV_ID = "你的环境 ID"
-const TWIKOO_REGION = "ap-shanghai" // 腾讯云区域
+<script is:inline>
+// 关键：用 is:inline 避免 Astro 编译问题
+const TWIKOO_ENV_ID = "你的-env-id";
+const TWIKOO_REGION = "ap-shanghai";
 
-document.addEventListener('DOMContentLoaded', async () => {
-  const section = document.querySelector('.comments-section')
-  const slug = section?.dataset.slug
-  const title = section?.dataset.title
+function initTwikoo() {
+  const el = document.getElementById('twikoo');
+  if (!el || window.twikooInited) return;
+  window.twikooInited = true;
 
-  if (!slug || !document.getElementById('twikoo')) return
+  // 动态加载
+  const script = document.createElement('script');
+  script.src = "https://cdn.staticfile.org/twikoo/1.6.26/twikoo.all.min.js";
+  script.onload = () => {
+    window.twikoo.init({
+      envId: TWIKOO_ENV_ID,
+      region: TWIKOO_REGION,
+      el: '#twikoo',
+      path: window.location.pathname, // 更稳
+      title: document.title,
+      enableQQ: false,
+    });
+  };
+  document.head.appendChild(script);
+}
 
-  // 动态加载 twikoo
-  if (!window.twikoo) {
-    const script = document.createElement('script')
-    script.src = 'https://cdn.staticfile.org/twikoo/1.6.26/twikoo.all.min.js'
-    await new Promise(resolve => {
-      script.onload = resolve
-      document.head.appendChild(script)
-    })
-  }
-
-  // 初始化 Twikoo
-  window.twikoo.init({
-    envId: TIKOO_ENV_ID,
-    region: TWIKOO_REGION,
-    el: '#twikoo',
-    path: slug,
-    title: title,
-    // 下面这些是为了和你原有风格对齐
-    light: 'light',
-    dark: 'auto',
-    enableQQ: false,
-    hideList: [],
-  })
-})
+// 兼容 Astro 路由切换
+document.addEventListener('DOMContentLoaded', initTwikoo);
+document.addEventListener('astro:after-swap', initTwikoo);
 </script>
 
 <style>
-/* 整体布局对齐你原来的风格 */
 .comments-section {
-  @apply mt-8;
+  margin-top: 2rem;
 }
-
-/* 输入框、按钮、卡片对齐你原有设计 */
 #twikoo {
-  --twikoo-border-color: #e7e5e4;
-  --twikoo-bg-color: #ffffff;
-  --twikoo-color: #1c1917;
-  --twikoo-light-gray: #d6d3d1;
-  --twikoo-gray: #a8a29e;
-  --twikoo-dark-gray: #78716c;
-  --twikoo-primary-color: #292524;
-  --twikoo-danger-color: #ef4444;
-}
-
-html.dark #twikoo {
-  --twikoo-border-color: #44403c;
-  --twikoo-bg-color: #1c1917;
-  --twikoo-color: #e7e5e4;
-  --twikoo-light-gray: #57534e;
-  --twikoo-gray: #78716c;
-  --twikoo-dark-gray: #a8a29e;
-  --twikoo-primary-color: #e7e5e4;
-}
-
-/* 输入框样式对齐你原来的无外框风格 */
-#twikoo .tk-input,
-#twikoo .tk-textarea {
-  @apply border-0 bg-transparent text-sm ring-0 outline-none !important;
-}
-
-#twikoo .tk-row {
-  @apply rounded-lg border border-stone-200 p-4 dark:border-stone-700 !important;
-}
-
-#twikoo .tk-submit {
-  @apply justify-end !important;
-}
-
-#twikoo .tk-btn {
-  @apply rounded-md px-3 py-1.5 text-xs font-medium transition hover:bg-stone-100 dark:hover:bg-stone-800 !important;
-}
-
-#twikoo .tk-content {
-  @apply text-sm leading-relaxed !important;
-}
-
-#twikoo .tk-avatar {
-  @apply h-9 w-9 rounded-full !important;
-}
-
-#twikoo .tk-replies .tk-avatar {
-  @apply h-7 w-7 !important;
-}
-
-/* 卡片、间距对齐你原来的布局 */
-#twikoo .tk-item {
-  @apply rounded-lg border border-stone-200 p-4 dark:border-stone-700 !important;
-}
-
-#twikoo .tk-replies .tk-item {
-  @apply border-0 pl-4 !important;
-}
-
-/* 剧透样式兼容（Twikoo 自带 || 剧透） */
-#twikoo .spoiler {
-  @apply bg-stone-900 text-transparent cursor-pointer rounded px-1 select-none !important;
-}
-html.dark #twikoo .spoiler {
-  @apply bg-stone-100 !important;
-}
-#twikoo .spoiler.revealed {
-  @apply bg-stone-200 text-inherit dark:bg-stone-700 !important;
+  width: 100%;
 }
 </style>
