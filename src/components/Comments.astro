@@ -1,7 +1,7 @@
 ---
 interface Props {
-	slug: string;
-	title: string;
+  slug: string;
+  title: string;
 }
 const { slug, title } = Astro.props;
 ---
@@ -11,34 +11,57 @@ const { slug, title } = Astro.props;
 </section>
 
 <script is:inline>
-// 关键：用 is:inline 避免 Astro 编译问题
-const TWIKOO_ENV_ID = "https://twikoo.wsyblog.cn";
-const TWIKOO_REGION = "ap-shanghai";
+  const TWIKOO_ENV_ID = "https://twikoo.wsyblog.cn";
+  const TWIKOO_REGION = "ap-shanghai";
 
-function initTwikoo() {
-  const el = document.getElementById('twikoo');
-  if (!el || window.twikooInited) return;
-  window.twikooInited = true;
+  // 保证只初始化一次
+  let twikooLoaded = false;
+  let twikooInited = false;
 
-  // 动态加载
-  const script = document.createElement('script');
-  script.src = "https://cdn.staticfile.org/twikoo/1.6.26/twikoo.all.min.js";
-  script.onload = () => {
-    window.twikoo.init({
+  function loadTwikoo() {
+    return new Promise((resolve) => {
+      if (twikooLoaded) return resolve(window.twikoo);
+      twikooLoaded = true;
+
+      const script = document.createElement("script");
+      script.src = "https://cdn.staticfile.org/twikoo/1.6.26/twikoo.all.min.js";
+      script.onload = () => {
+        resolve(window.twikoo);
+      };
+      document.head.appendChild(script);
+    });
+  }
+
+  async function initComments() {
+    const el = document.getElementById("twikoo");
+    if (!el) return;
+
+    // 防止重复初始化
+    if (twikooInited) {
+      el.innerHTML = "";
+    }
+
+    const twikoo = await loadTwikoo();
+    twikoo.init({
       envId: TWIKOO_ENV_ID,
       region: TWIKOO_REGION,
-      el: '#twikoo',
-      path: window.location.pathname, // 更稳
+      el: "#twikoo",
+      path: window.location.pathname,
       title: document.title,
       enableQQ: false,
     });
-  };
-  document.head.appendChild(script);
-}
 
-// 兼容 Astro 路由切换
-document.addEventListener('DOMContentLoaded', initTwikoo);
-document.addEventListener('astro:after-swap', initTwikoo);
+    twikooInited = true;
+  }
+
+  // 页面首次加载
+  document.addEventListener("DOMContentLoaded", initComments);
+
+  // Astro 路由跳转后强制重新渲染评论（关键修复）
+  document.addEventListener("astro:after-swap", () => {
+    twikooInited = false;
+    initComments();
+  });
 </script>
 
 <style>
